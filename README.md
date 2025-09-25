@@ -1,7 +1,6 @@
 # Extract Manager  
 
 ![Release](https://img.shields.io/github/v/release/Altansar69/Extract-Manager?style=flat-square) 
-![Downloads](https://img.shields.io/github/downloads/Altansar69/Extract-Manager/total?style=flat-square) 
 ![.NET Runtime](https://img.shields.io/badge/.NET-9.0-blue?style=flat-square) 
 ![License](https://img.shields.io/github/license/Altansar69/Extract-Manager?style=flat-square)
 
