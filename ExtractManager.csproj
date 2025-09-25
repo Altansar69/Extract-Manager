@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<Deterministic>false</Deterministic>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<SourceRevisionId></SourceRevisionId>
+		<Platforms>AnyCPU</Platforms>
+		<!-- Prevent SDK from generating version attributes so we can inject our own -->
+		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+	</PropertyGroup>
+
+	<!-- Generate build-time version attributes so the version updates on each build -->
+	<Target Name="GenerateBuildVersion" BeforeTargets="CoreCompile">
+		<PropertyGroup>
+			<!-- Build: yyMM (0-9999), Revision: ddHH (0-3123), both within 0..65535 -->
+			<GenBuild>$([System.DateTime]::UtcNow.ToString(yyMM))</GenBuild>
+			<GenRev>$([System.DateTime]::UtcNow.ToString(ddHH))</GenRev>
+			<GeneratedFileVersion>1.0.$(GenBuild).$(GenRev)</GeneratedFileVersion>
+			<GeneratedVersionFile>$(IntermediateOutputPath)GeneratedVersionInfo.cs</GeneratedVersionFile>
+		</PropertyGroup>
+		<ItemGroup>
+			<VersionLines Include="[assembly: System.Reflection.AssemblyVersion(&quot;1.0.0.0&quot;)]" />
+			<VersionLines Include="[assembly: System.Reflection.AssemblyFileVersion(&quot;$(GeneratedFileVersion)&quot;)]" />
+			<VersionLines Include="[assembly: System.Reflection.AssemblyInformationalVersion(&quot;$(GeneratedFileVersion)&quot;)]" />
+		</ItemGroup>
+		<WriteLinesToFile File="$(GeneratedVersionFile)" Lines="@(VersionLines)" Overwrite="true" />
+		<ItemGroup>
+			<Compile Include="$(GeneratedVersionFile)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- Publish Settings - Applied only for Release configuration -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>false</SelfContained>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<PublishReadyToRun>true</PublishReadyToRun>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="SharpCompress" Version="0.40.0" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+<Window x:Class="ExtractManager.SilentProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Extracting..." SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Topmost="True">
+    <Border Padding="16" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" CornerRadius="6">
+        <StackPanel Orientation="Vertical" MinWidth="320" >
+            <TextBlock x:Name="MessageText" TextWrapping="Wrap"
+                       Text="Extracting archive... This window will close automatically."/>
+            <ProgressBar Margin="0,12,0,0" Height="8" IsIndeterminate="True"/>
+        </StackPanel>
+    </Border>
+</Window>

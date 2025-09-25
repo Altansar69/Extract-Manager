@@ -1,0 +1,133 @@
+﻿<Window x:Class="ExtractManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:extractManager="clr-namespace:ExtractManager"
+        mc:Ignorable="d"
+        Title="Extract Manager" Height="600" Width="800"
+        Closing="MainWindow_Closing"
+        d:DataContext="{d:DesignInstance extractManager:MainWindow}"
+        Background="{StaticResource WindowBackgroundBrush}"
+        Foreground="{StaticResource TextBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+            <TabItem Header="Passwords">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <TextBox x:Name="PasswordTextBox" Width="200" KeyDown="PasswordTextBox_KeyDown" />
+                        <Button Content="Add Password" Click="AddPassword_Click" />
+                        <Button Content="Remove Selected" Click="RemovePassword_Click" />
+                    </StackPanel>
+                    <ListBox Grid.Row="1" x:Name="PasswordListBox" ItemsSource="{Binding Passwords}"
+                             AlternationCount="2"
+                             BorderThickness="0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="5" />
+                                <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}" />
+                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu>
+                                            <MenuItem Header="Remove"
+                                                      Command="{Binding DataContext.RemovePasswordCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}" />
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <StackPanel Margin="10">
+                    <GroupBox Header="7-Zip Management">
+                        <StackPanel>
+                            <TextBlock x:Name="SevenZipVersionTextBlock" />
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Check for 7-Zip Update" Click="CheckFor7zUpdate_Click" />
+                                <Button x:Name="Update7ZButton" Content="Download/Update 7-Zip" Click="Update7z_Click"
+                                        IsEnabled="False" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Context Menu">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Register Context Menu" Click="RegisterContextMenu_Click" />
+                            <Button Content="Unregister Context Menu" Click="UnregisterContextMenu_Click" />
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Import/Export Passwords">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBox x:Name="ImportExportTextBox" Grid.Row="0" />
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <Button Content="Export" Click="ExportPasswords_Click" />
+                                <Button Content="Import" Click="ImportPasswords_Click" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Application Settings">
+                        <StackPanel>
+                            <CheckBox IsChecked="{Binding Settings.SaveWindowBounds, Mode=TwoWay}"
+                                      Content="Save window size and location on exit" />
+                            <CheckBox IsChecked="{Binding Settings.IsDebugLoggingEnabled, Mode=TwoWay}"
+                                      Content="Enable Debug File Logging" />
+                            <TextBlock Text="Logs are saved to debug.log in the application directory."
+                                       FontStyle="Italic" />
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Log">
+                <RichTextBox x:Name="LogRichTextBox" IsReadOnly="true" VerticalScrollBarVisibility="Auto"
+                             Background="{StaticResource ControlBackgroundBrush}"
+                             Foreground="{StaticResource TextBrush}"
+                             BorderThickness="0">
+                    <FlowDocument>
+                        <Paragraph x:Name="LogParagraph" />
+                    </FlowDocument>
+                </RichTextBox>
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding AppVersion}" VerticalAlignment="Center" Grid.Column="0"
+                       Foreground="{StaticResource AccentBrush}"
+                       MouseLeftButtonDown="VersionText_MouseLeftButtonDown"
+                       Cursor="Hand"
+                       TextDecorations="Underline" />
+            <Button Content="Select Archive to Extract" Click="ExtractArchive_Click" Grid.Column="2" />
+        </Grid>
+    </Grid>
+</Window>
