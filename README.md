@@ -119,4 +119,4 @@ YhoHRRdKXQgDE0IQGw9bXA9fQwQUBFxVFwkHEm8=
 
 ## 📥 Download  
 
-👉 [Latest Release on GitHub](../../releases)  
+👉 [Latest Release on GitHub](../../releases/latest)  
